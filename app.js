@@ -14,14 +14,15 @@ app.use(express.json());
 
 app.get('/snippets', async (req, res) => {
   try {
-    const snippets = await prisma.snippet.findMany({
-      include: { user: true }, // Include user data in the response
-    });
+    const snippets = await prisma.snippet.findMany();
     res.json(snippets);
   } catch (error) {
+    console.error('Error fetching snippets:', error);
     res.status(500).json({ error: 'Failed to fetch snippets' });
   }
 });
+
+
 
 app.post('/snippets', async (req, res) => {
   try {

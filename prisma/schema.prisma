@@ -13,5 +13,5 @@ model Snippet {
   code      String
   language  String
   createdAt DateTime @default(now())
-  createdBy String   
+  createdBy String? 
 }
