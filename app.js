@@ -77,7 +77,7 @@ app.put('/snippets/:id', async (req, res) => {
 
     res.json(updatedSnippet);
   } catch (error) {
-    console.error('Error updating snippet:', error);
+    console.error('Error updating the snippet:', error);
     res.status(500).json({ error: 'Failed to update snippet' });
   }
 });
