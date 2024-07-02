@@ -84,7 +84,7 @@ app.put('/snippets/:id', async (req, res) => {
 
 
 
-const groq = new Groq({ apiKey: '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' });
+const groq = new Groq({ apiKey: process.env.API_KEY  });
 
 app.use(bodyParser.json());
 
