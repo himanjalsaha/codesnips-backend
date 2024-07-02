@@ -2,7 +2,8 @@ const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 const dotenv = require('dotenv');
 const cors = require('cors');
-
+const Groq = require('groq-sdk');
+const bodyParser = require('body-parser');
 dotenv.config();
 
 const prisma = new PrismaClient();
@@ -80,6 +81,48 @@ app.put('/snippets/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to update snippet' });
   }
 });
+
+
+
+const groq = new Groq({ apiKey: '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' });
+
+app.use(bodyParser.json());
+
+
+app.post('/chat', async (req, res) => {
+  const { message } = req.body;
+
+  if (!message) {
+    return res.status(400).json({ error: 'Message is required' });
+  }
+
+  try {
+    const chatCompletion = await groq.chat.completions.create({
+      "messages": [
+        {
+          "role": "user",
+          "content": message
+        }
+      ],
+      "model": "llama3-8b-8192",
+      "temperature": 1,
+      "max_tokens": 1024,
+      "top_p": 1,
+      "stream": false,
+      "stop": null
+    });
+
+    res.json({ response: chatCompletion.choices[0].message.content });
+  } catch (error) {
+    console.error('Error creating chat completion:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
+
+
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
